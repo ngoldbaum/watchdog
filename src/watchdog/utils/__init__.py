@@ -72,6 +72,9 @@ class BaseThread(threading.Thread):
         """
 
     def start(self) -> None:
+        if self._stopped_event.is_set():
+            # stop was called before start, so don't start
+            return
         self.on_thread_start()
         threading.Thread.start(self)
 
