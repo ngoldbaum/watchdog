@@ -76,6 +76,11 @@ class BaseThread(threading.Thread):
             # stop was called before start, so don't start
             return
         self.on_thread_start()
+        if self._stopped_event.is_set():
+            # stop was called while we were doing setup,
+            # so don't actually spawn a thread
+            self.on_thread_stop()
+            return
         threading.Thread.start(self)
 
 
